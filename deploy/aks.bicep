@@ -33,16 +33,16 @@ resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   }
 }
 
-resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
-  parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
-  name: 'sn-${clusterName}'
-}
-
-// // ユーザー割り当て Managed ID の作成
-// resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-//   name: managedIdName
-//   location: location
+// resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
+//   parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
+//   name: 'sn-${clusterName}'
 // }
+
+// ユーザー割り当て Managed ID の作成
+resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: managedIdName
+  location: location
+}
 
 // // ロールの作成と割り当て
 // @description('A new GUID used to identify the role assignment')
