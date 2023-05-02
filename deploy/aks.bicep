@@ -2,7 +2,7 @@
 param location string = resourceGroup().location
 
 @description('AKS Cluster Name')
-param clusterName string
+param clusterName string = 'github-actions-aks-all-cluster'
 
 // @description('AKS Cluster Managed Identity Name')
 // param managedIdName string = guid(clusterName)
