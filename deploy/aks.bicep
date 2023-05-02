@@ -13,8 +13,8 @@ param VNetAddressPrefix string = '10.10.0.0/16'
 @description('SUBNET Name Prefix')
 param SubnetAddressPrefix string = '10.10.1.0/24'
 
-@description('role Define Id')
-param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+// @description('role Define Id')
+// param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   name: 'vn-${clusterName}'
@@ -61,7 +61,8 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
   name: roleNameGuid
   scope: AKSSubNet
   properties: {
-    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
+    // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
+    roleDefinitionId: '/subscriptions/4463a0e9-df15-4e30-ac13-45e4e74bb39f/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
     principalId: ManagedId.properties.principalId
     principalType: 'ServicePrincipal'
     // https://githubmemory.com/repo/Azure/bicep/issues/3695
@@ -71,7 +72,7 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
   ]
 }
 
-output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+// output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 // //　AKS Cluster の作成
 // resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
