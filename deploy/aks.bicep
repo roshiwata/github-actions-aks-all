@@ -4,8 +4,8 @@ param location string = resourceGroup().location
 @description('AKS Cluster Name')
 param clusterName string
 
-@description('AKS Cluster Managed Identity Name')
-param managedIdName string = guid(clusterName)
+// @description('AKS Cluster Managed Identity Name')
+// param managedIdName string = guid(clusterName)
 
 @description('VNET Name Prefix')
 param VNetAddressPrefix string = '10.10.0.0/16'
