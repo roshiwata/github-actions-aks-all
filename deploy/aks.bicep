@@ -74,64 +74,65 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
 
 // output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
-// //　AKS Cluster の作成
-// resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
-//   name: clusterName
-//   location: location
-//   identity: {
-//     type: 'UserAssigned'
-//     // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
-//     // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
-//     userAssignedIdentities: {
-//       '${ManagedId.id}': {}
-//     }
-//   }
-//   properties: {
-//     dnsPrefix: clusterName
-//     enableRBAC: true
-//     agentPoolProfiles: [
-//       {
-//         name: 'agentpool1'
-//         count: 2
-//         vmSize: 'standard_d2s_v3'
-//         mode: 'System'
-//         vnetSubnetID: AKSSubNet.id
-//       }
-//     ]
-//   }
-// }
+//　AKS Cluster の作成
+resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
+  name: clusterName
+  location: location
+  identity: {
+    type: 'UserAssigned'
+    // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
+    // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
+    userAssignedIdentities: {
+      '${ManagedId.id}': {}
+    }
+  }
+  properties: {
+    dnsPrefix: clusterName
+    enableRBAC: true
+    agentPoolProfiles: [
+      {
+        name: 'agentpool1'
+        count: 2
+        vmSize: 'standard_d2s_v3'
+        mode: 'System'
+        vnetSubnetID: AKSSubNet.id
+      }
+    ]
+  }
+}
 
-// // ACRの作成
-// @description('Provide a globally unique name of your Azure Container Registry')
-// param acrName string
+// ACRの作成
+@description('Provide a globally unique name of your Azure Container Registry')
+param acrName string
 
-// @description('Provide a tier of your Azure Container Registry.')
-// param acrSku string = 'Basic'
+@description('Provide a tier of your Azure Container Registry.')
+param acrSku string = 'Basic'
 
-// resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
-//   name: acrName
-//   location: location
-//   sku: {
-//     name: acrSku
-//   }
-//   properties: {
-//     adminUserEnabled: true
-//   }
-// }
+resource acr 'Microsoft.ContainerRegistry/registries@2021-06-01-preview' = {
+  name: acrName
+  location: location
+  sku: {
+    name: acrSku
+  }
+  properties: {
+    adminUserEnabled: true
+  }
+}
 
-// //https://docs.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles
+//https://docs.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles
 // var roleAcrPull = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
 
-// resource assignAcrPullToAks 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-//   name: guid(resourceGroup().id, acrName, aks.id, 'AssignAcrPullToAks')
-//   scope: acr
-//   properties: {
-//     description: 'Assign AcrPull role to AKS'
-//     principalId: aks.properties.identityProfile.kubeletidentity.objectId //https://github.com/Azure/bicep/discussions/3181
-//     principalType: 'ServicePrincipal'
-//     roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleAcrPull}'
-//   }
-//   dependsOn: [
-//     aks
-//   ]
-// }
+resource assignAcrPullToAks 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(resourceGroup().id, acrName, aks.id, 'AssignAcrPullToAks')
+  scope: acr
+  properties: {
+    description: 'Assign AcrPull role to AKS'
+    principalId: aks.properties.identityProfile.kubeletidentity.objectId //https://github.com/Azure/bicep/discussions/3181
+    principalType: 'ServicePrincipal'
+    // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleAcrPull}'
+    roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+  }
+  // dependsOn: [
+  //   aks
+  // ]
+}
