@@ -13,8 +13,8 @@ param VNetAddressPrefix string = '10.10.0.0/16'
 @description('SUBNET Name Prefix')
 param SubnetAddressPrefix string = '10.10.1.0/24'
 
-// @description('role Define Id')
-// param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+@description('role Define Id')
+param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   name: 'vn-${clusterName}'
