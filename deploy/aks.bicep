@@ -33,10 +33,10 @@ resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   }
 }
 
-// resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
-//   parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
-//   name: 'sn-${clusterName}'
-// }
+resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
+  parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
+  name: 'sn-${clusterName}'
+}
 
 // ユーザー割り当て Managed ID の作成
 resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
@@ -44,23 +44,23 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
   location: location
 }
 
-// // ロールの作成と割り当て
-// @description('A new GUID used to identify the role assignment')
-// param roleNameGuid string = guid(managedIdName)
+// ロールの作成と割り当て
+@description('A new GUID used to identify the role assignment')
+param roleNameGuid string = guid(managedIdName)
 
-// resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-//   name: roleNameGuid
-//   scope: AKSSubNet
-//   properties: {
-//     roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
-//     principalId: ManagedId.properties.principalId
-//     principalType: 'ServicePrincipal'
-//     // https://githubmemory.com/repo/Azure/bicep/issues/3695
-//   }
-//   dependsOn: [
-//     ManagedId
-//   ]
-// }
+resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
+  name: roleNameGuid
+  scope: AKSSubNet
+  properties: {
+    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
+    principalId: ManagedId.properties.principalId
+    principalType: 'ServicePrincipal'
+    // https://githubmemory.com/repo/Azure/bicep/issues/3695
+  }
+  dependsOn: [
+    ManagedId
+  ]
+}
 
 // //　AKS Cluster の作成
 // resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
