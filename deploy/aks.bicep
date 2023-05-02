@@ -62,7 +62,7 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
   scope: AKSSubNet
   properties: {
     // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+    roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
     principalId: ManagedId.properties.principalId
     principalType: 'ServicePrincipal'
     // https://githubmemory.com/repo/Azure/bicep/issues/3695
