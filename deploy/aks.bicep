@@ -61,7 +61,7 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
   name: roleNameGuid
   scope: AKSSubNet
   properties: {
-    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${customRoleId}'
+    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
     principalId: ManagedId.properties.principalId
     principalType: 'ServicePrincipal'
     // https://githubmemory.com/repo/Azure/bicep/issues/3695
@@ -71,7 +71,7 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
   ]
 }
 
-output customRoleId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 // //　AKS Cluster の作成
 // resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
