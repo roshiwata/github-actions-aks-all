@@ -103,7 +103,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
 
 // ACRの作成
 @description('Provide a globally unique name of your Azure Container Registry')
-param acrName string = github-actions-aks-all-acr
+param acrName string = githubactionsaksallacrwaka
 
 @description('Provide a tier of your Azure Container Registry.')
 param acrSku string = 'Basic'
