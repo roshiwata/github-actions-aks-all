@@ -43,11 +43,16 @@ resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
 }
 
 resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
-  parent: AKSVNet
   name: 'sn-${clusterName}'
-  dependsOn: [
-    AKSVNet
-  ]
+  // dependsOn: [
+  //   AKSVNet
+  // ]
+  properties: {
+    addressPrefix: SubnetAddressPrefix
+    virtualNetwork: {
+      id: AKSVNet.id
+    }
+  }
 }
 
 // ユーザー割り当て Managed ID の作成
