@@ -16,6 +16,12 @@ param SubnetAddressPrefix string = '10.10.1.0/24'
 // @description('role Define Id')
 // param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
+// var role = {
+//   Owner: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635'
+//   Contributor: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
+//   Reader: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7'
+// }
+
 resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   name: 'vn-${clusterName}'
   location: location
@@ -47,32 +53,24 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
   location: location
 }
 
-// var role = {
-//   Owner: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635'
-//   Contributor: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
-//   Reader: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7'
+// // ロールの作成と割り当て
+// @description('A new GUID used to identify the role assignment')
+// param roleNameGuid string = guid(managedIdName)
+
+// resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
+//   name: roleNameGuid
+//   scope: AKSSubNet
+//   properties: {
+//     // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
+//     roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+//     principalId: ManagedId.properties.principalId
+//     principalType: 'ServicePrincipal'
+//     // https://githubmemory.com/repo/Azure/bicep/issues/3695
+//   }
+//   // dependsOn: [
+//   //   ManagedId
+//   // ]
 // }
-
-// ロールの作成と割り当て
-@description('A new GUID used to identify the role assignment')
-param roleNameGuid string = guid(managedIdName)
-
-resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
-  name: roleNameGuid
-  scope: AKSSubNet
-  properties: {
-    // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
-    roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
-    principalId: ManagedId.properties.principalId
-    principalType: 'ServicePrincipal'
-    // https://githubmemory.com/repo/Azure/bicep/issues/3695
-  }
-  // dependsOn: [
-  //   ManagedId
-  // ]
-}
-
-// // output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
 
 // //　AKS Cluster の作成
 // resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
