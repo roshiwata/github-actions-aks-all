@@ -59,9 +59,6 @@ param roleNameGuid string = guid(managedIdName)
 
 resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-preview' = {
   name: roleNameGuid
-  dependsOn: [
-    ManagedId
-  ]
   scope: AKSSubNet
   properties: {
     // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
@@ -70,7 +67,9 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
     principalType: 'ServicePrincipal'
     // https://githubmemory.com/repo/Azure/bicep/issues/3695
   }
-
+  // dependsOn: [
+  //   ManagedId
+  // ]
 }
 
 // // output roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'

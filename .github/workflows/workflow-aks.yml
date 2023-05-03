@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'deploy/**'
+    # paths:
+    #   - 'deploy/**'
 
 permissions:
   id-token: write
