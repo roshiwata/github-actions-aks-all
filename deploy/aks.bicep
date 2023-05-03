@@ -71,8 +71,8 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
     enableRBAC: true
     agentPoolProfiles: [
       {
-        name: 'agentpool1'
-        count: 2
+        name: 'agentpool'
+        count: 1
         vmSize: 'Standard_D2as_v4'
         mode: 'System'
         vnetSubnetID: AKSSubNet.id
