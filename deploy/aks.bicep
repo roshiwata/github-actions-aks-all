@@ -4,8 +4,8 @@ param location string = resourceGroup().location
 @description('AKS Cluster Name')
 param clusterName string = 'github-actions-aks-all-cluster'
 
-// @description('AKS Cluster Managed Identity Name')
-// param managedIdName string = guid(clusterName)
+@description('AKS Cluster Managed Identity Name')
+param managedIdName string = guid(clusterName)
 
 @description('VNET Name Prefix')
 param VNetAddressPrefix string = '10.10.0.0/16'
@@ -47,11 +47,11 @@ resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
   name: 'sn-${clusterName}'
 }
 
-// // ユーザー割り当て Managed ID の作成
-// resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-//   name: managedIdName
-//   location: location
-// }
+// ユーザー割り当て Managed ID の作成
+resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: managedIdName
+  location: location
+}
 
 // // ロールの作成と割り当て
 // @description('A new GUID used to identify the role assignment')
