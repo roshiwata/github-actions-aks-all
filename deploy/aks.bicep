@@ -53,6 +53,7 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
 //   }
 // }
 
+
 // //　AKS Cluster の作成
 // resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
 //   name: clusterName
