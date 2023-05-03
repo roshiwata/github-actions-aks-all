@@ -31,20 +31,23 @@ resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
         VNetAddressPrefix
       ]
     }
-    subnets: [
-      {
-        name: 'sn-${clusterName}'
-        properties: {
-          addressPrefix: SubnetAddressPrefix
-        }
-      }
-    ]
+    // subnets: [
+    //   {
+    //     name: 'sn-${clusterName}'
+    //     properties: {
+    //       addressPrefix: SubnetAddressPrefix
+    //     }
+    //   }
+    // ]
   }
 }
 
 resource AKSSubNet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' = {
-  parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
   name: 'sn-${clusterName}'
+  parent: AKSVNet // https://githubmemory.com/repo/Azure/bicep/issues/1972
+  properties: {
+    addressPrefix: SubnetAddressPrefix
+  }
 }
 
 // ユーザー割り当て Managed ID の作成
