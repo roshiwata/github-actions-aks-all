@@ -13,6 +13,15 @@ param VNetAddressPrefix string = '10.10.0.0/16'
 @description('SUBNET Name Prefix')
 param SubnetAddressPrefix string = '10.10.1.0/24'
 
+// @description('role Define Id')
+// param roleDefId string = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+
+// var role = {
+//   Owner: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635'
+//   Contributor: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
+//   Reader: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7'
+// }
+
 resource AKSVNet 'Microsoft.Network/virtualNetworks@2021-03-01' = {
   name: 'vn-${clusterName}'
   location: location
@@ -52,14 +61,15 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
 //   name: roleNameGuid
 //   scope: AKSSubNet
 //   properties: {
-//     roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
+//     // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleDefId}'
+//     roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
 //     principalId: ManagedId.properties.principalId
 //     principalType: 'ServicePrincipal'
 //     // https://githubmemory.com/repo/Azure/bicep/issues/3695
 //   }
-//   dependsOn: [
-//     ManagedId
-//   ]
+//   // dependsOn: [
+//   //   ManagedId
+//   // ]
 // }
 
 // //　AKS Cluster の作成
@@ -91,7 +101,7 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
 
 // // ACRの作成
 // @description('Provide a globally unique name of your Azure Container Registry')
-// param acrName string
+// param acrName string = 'githubactionsaksallacrwaka'
 
 // @description('Provide a tier of your Azure Container Registry.')
 // param acrSku string = 'Basic'
@@ -108,7 +118,7 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
 // }
 
 // //https://docs.microsoft.com/ja-jp/azure/role-based-access-control/built-in-roles
-// var roleAcrPull = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+// // var roleAcrPull = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
 
 // resource assignAcrPullToAks 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
 //   name: guid(resourceGroup().id, acrName, aks.id, 'AssignAcrPullToAks')
@@ -117,9 +127,10 @@ resource ManagedId 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30'
 //     description: 'Assign AcrPull role to AKS'
 //     principalId: aks.properties.identityProfile.kubeletidentity.objectId //https://github.com/Azure/bicep/discussions/3181
 //     principalType: 'ServicePrincipal'
-//     roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleAcrPull}'
+//     // roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/${roleAcrPull}'
+//     roleDefinitionId: subscriptionResourceId(subscription().subscriptionId,'Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
 //   }
-//   dependsOn: [
-//     aks
-//   ]
+//   // dependsOn: [
+//   //   aks
+//   // ]
 // }
