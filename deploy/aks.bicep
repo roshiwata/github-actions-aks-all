@@ -73,7 +73,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
       {
         name: 'agentpool1'
         count: 2
-        vmSize: 'standard_d2s_v3'
+        vmSize: 'Standard_D2as_v4'
         mode: 'System'
         vnetSubnetID: AKSSubNet.id
       }
