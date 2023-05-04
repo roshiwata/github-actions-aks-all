@@ -63,7 +63,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
     // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
     // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
     userAssignedIdentities: {
-      '${ManagedId.id}': {}
+      '${ManagedId}': {}
     }
   }
   properties: {
