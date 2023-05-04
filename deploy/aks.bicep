@@ -54,32 +54,32 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
 }
 
 
-// //　AKS Cluster の作成
-// resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
-//   name: clusterName
-//   location: location
-//   identity: {
-//     type: 'UserAssigned'
-//     // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
-//     // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
-//     userAssignedIdentities: {
-//       '${ManagedId.id}': {}
-//     }
-//   }
-//   properties: {
-//     dnsPrefix: clusterName
-//     enableRBAC: true
-//     agentPoolProfiles: [
-//       {
-//         name: 'agentpool1'
-//         count: 2
-//         vmSize: 'standard_d2s_v3'
-//         mode: 'System'
-//         vnetSubnetID: AKSSubNet.id
-//       }
-//     ]
-//   }
-// }
+//　AKS Cluster の作成
+resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
+  name: clusterName
+  location: location
+  identity: {
+    type: 'UserAssigned'
+    // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
+    // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
+    userAssignedIdentities: {
+      '${ManagedId.id}': {}
+    }
+  }
+  properties: {
+    dnsPrefix: clusterName
+    enableRBAC: true
+    agentPoolProfiles: [
+      {
+        name: 'agentpool1'
+        count: 2
+        vmSize: 'standard_d2s_v3'
+        mode: 'System'
+        vnetSubnetID: AKSSubNet.id
+      }
+    ]
+  }
+}
 
 // // ACRの作成
 // @description('Provide a globally unique name of your Azure Container Registry')
