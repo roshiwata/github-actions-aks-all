@@ -62,20 +62,22 @@ resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
     type: 'UserAssigned'
     // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
     // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
-    userAssignedIdentities: {}
+    userAssignedIdentities: {
+      '${ManagedId.id}': {}
+    }
   }
   properties: {
     dnsPrefix: clusterName
     enableRBAC: true
-    agentPoolProfiles: [
-      {
-        name: 'agentpool1'
-        count: 2
-        vmSize: 'standard_d2s_v3'
-        mode: 'System'
-        vnetSubnetID: AKSSubNet.id
-      }
-    ]
+    // agentPoolProfiles: [
+    //   {
+    //     name: 'agentpool1'
+    //     count: 2
+    //     vmSize: 'standard_d2s_v3'
+    //     mode: 'System'
+    //     vnetSubnetID: AKSSubNet.id
+    //   }
+    // ]
   }
 }
 
