@@ -54,16 +54,14 @@ resource RoleAssignment 'Microsoft.Authorization/roleAssignments@2020-08-01-prev
 }
 
 
-//　AKS Cluster の作成
+// AKS Cluster の作成
 resource aks 'Microsoft.ContainerService/managedClusters@2021-08-01' = {
   name: clusterName
   location: location
   identity: {
     type: 'UserAssigned'
-    // userAssignedIdentities: ManagedIdと指定するとデプロイできない。
-    // https://stackoverflow.com/questions/64877861/the-template-function-reference-is-not-expected-at-this-location
     userAssignedIdentities: {
-      '${ManagedId.id}': {}
+      [ManagedId.id]: {}
     }
   }
   properties: {
